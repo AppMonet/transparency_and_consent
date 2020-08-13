@@ -13,7 +13,6 @@ defmodule TransparencyAndConsent.VendorList do
 
   def decode(_), do: {:error, :invalid_input}
 
-  # defp do_decode(:field, input, max_id) when byte_size(input) == max_id do
   defp do_decode(:field, input, max_id) do
     init = {:ok, [], input}
 
@@ -28,10 +27,6 @@ defmodule TransparencyAndConsent.VendorList do
         {:halt, {:error, :invalid_input}}
     end)
   end
-
-  # defp do_decode(:field, input, max_id) do
-  #   {:error, "got input sized #{byte_size(input)} with max id #{max_id}"}
-  # end
 
   defp do_decode(:range, input, _max_id) do
     with {:ok, num_entries, rest} <- num_entries(input) do
