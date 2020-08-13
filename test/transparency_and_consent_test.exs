@@ -28,12 +28,14 @@ defmodule TransparencyAndConsentTest do
                TransparencyAndConsent.decode("WAT")
     end
 
-    test "returns DecodeError for unsupported versions" do
-      v1_input =
-        "BOeLqXmOeLqXmAtABBENCL-AAAAmB7_______9______5uz_Ov_v_f__33e8__9v_l_7_-___u_-33d4-_1vf99yfm1-7ftr3tp_87ues2_Xur__59__3z3_9phPrsks9Kg"
+    test "correctly parses version 1.1 as well" do
+      input =
+        "BOtn-dKO4E4lPAKAkBITDW-AAAAyN7_______9_-____9uz_Ov_v_f__33e8__9v_l_7_-___u_-23d4u_1vf99yfmx-7etr3tp_47ues2_Xurf_71__3z3_9pxP78E89r7335EQ_v-_t-b7BCHN_Y2v-8K96lPKACE"
 
-      assert {:error, %TransparencyAndConsent.DecodeError{message: "unsupported version: 1"}} =
-               TransparencyAndConsent.decode(v1_input)
+      assert {:ok, %TransparencyAndConsent{version: 1, vendor_consents: consents}} =
+               TransparencyAndConsent.decode(input)
+
+      assert length(consents) == 605
     end
   end
 end

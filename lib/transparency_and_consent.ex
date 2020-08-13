@@ -1,6 +1,6 @@
 defmodule TransparencyAndConsent do
   @moduledoc """
-  IAB Transparency and Consent Framework v2.0 String Decoding
+  IAB Transparency and Consent Framework v1.1 & v2.0 String Decoding.
 
   Currently only decodes the "version" and the "vendor consents" parts of the "core" segment.
   """
@@ -20,7 +20,7 @@ defmodule TransparencyAndConsent do
   ]
 
   @doc """
-  Decodes TCF version 2 strings.
+  Decodes TCF strings.
 
   ## Examples
 

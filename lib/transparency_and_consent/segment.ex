@@ -2,8 +2,6 @@ defmodule TransparencyAndConsent.Segment do
   @moduledoc false
   alias TransparencyAndConsent.{VendorList, DecodeError}
 
-  @supported_version 2
-
   @segments %{
     0 => :core,
     1 => :vendors_disclosed,
@@ -11,8 +9,19 @@ defmodule TransparencyAndConsent.Segment do
     3 => :publisher_tc
   }
 
-  @core_fields [
-    :version,
+  @v1_core_fields [
+    :created,
+    :last_updated,
+    :cmp_id,
+    :cmp_version,
+    :consent_screen,
+    :consent_language,
+    :vendor_list_version,
+    :purpose_consents,
+    :vendor_consents
+  ]
+
+  @v2_core_fields [
     :created,
     :last_updated,
     :cmp_id,
@@ -42,15 +51,18 @@ defmodule TransparencyAndConsent.Segment do
   def segment_to_id(_), do: {:error, %DecodeError{message: "unknown segment type"}}
 
   def decode_segment(:core, segment, acc) do
-    Enum.reduce_while(@core_fields, {:ok, acc, segment}, fn field, {:ok, acc, segment} ->
-      case decode_field(field, segment, acc) do
-        {:ok, acc, rest} -> {:cont, {:ok, acc, rest}}
-        error -> {:halt, error}
+    with {:ok, acc, rest} <- version(segment, acc),
+         {:ok, field_sequence} <- field_sequence(acc) do
+      Enum.reduce_while(field_sequence, {:ok, acc, rest}, fn field, {:ok, acc, segment} ->
+        case decode_field(field, segment, acc) do
+          {:ok, acc, rest} -> {:cont, {:ok, acc, rest}}
+          error -> {:halt, error}
+        end
+      end)
+      |> case do
+        {:ok, acc, _} -> {:ok, acc}
+        error -> error
       end
-    end)
-    |> case do
-      {:ok, acc, _} -> {:ok, acc}
-      error -> error
     end
   end
 
@@ -58,13 +70,17 @@ defmodule TransparencyAndConsent.Segment do
     {:error, %DecodeError{message: "unsupported segment type"}}
   end
 
-  defp decode_field(:version, <<version::binary-size(6), rest::binary()>>, acc) do
-    case Integer.parse(version, 2) do
-      {@supported_version, ""} ->
-        {:ok, %{acc | version: @supported_version}, rest}
+  defp field_sequence(%{version: 1}), do: {:ok, @v1_core_fields}
+  defp field_sequence(%{version: 2}), do: {:ok, @v2_core_fields}
 
+  defp field_sequence(%{version: version}) do
+    {:error, %DecodeError{message: "unsupported version #{version}"}}
+  end
+
+  defp version(<<version::binary-size(6), rest::binary()>>, acc) do
+    case Integer.parse(version, 2) do
       {version, ""} ->
-        {:error, %DecodeError{message: "unsupported version: #{version}"}}
+        {:ok, %{acc | version: version}, rest}
 
       _ ->
         {:error, %DecodeError{message: "invalid version"}}
@@ -204,6 +220,8 @@ defmodule TransparencyAndConsent.Segment do
   defp decode_field(:publisher_country_code, _segement, _acc), do: invalid_input_error()
 
   defp decode_field(:vendor_consents, segment, acc) do
+    IO.inspect(segment)
+
     with {:ok, vendor_consents, rest} <- VendorList.decode(segment) do
       {:ok, %{acc | vendor_consents: vendor_consents}, rest}
     end
