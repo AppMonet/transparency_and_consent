@@ -1,6 +1,6 @@
 # TransparencyAndConsent
 
-Decode IAB Transparency and Consent Framework 2.0 strings.
+Decode IAB Transparency and Consent Framework v1.1 & v2.0 strings.
 
 Currently only decodes the version, and the list of vendor consents for maximum performance.
 
