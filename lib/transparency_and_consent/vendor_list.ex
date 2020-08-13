@@ -1,4 +1,6 @@
 defmodule TransparencyAndConsent.VendorList do
+  @moduledoc false
+
   alias TransparencyAndConsent.DecodeError
 
   @encoding_type %{
@@ -13,7 +15,7 @@ defmodule TransparencyAndConsent.VendorList do
     end
   end
 
-  def decode(_), do: invalid_input_error() 
+  def decode(_), do: invalid_input_error()
 
   defp do_decode(:field, input, max_id) do
     init = {:ok, [], input}

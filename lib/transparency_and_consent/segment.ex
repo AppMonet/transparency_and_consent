@@ -1,4 +1,5 @@
 defmodule TransparencyAndConsent.Segment do
+  @moduledoc false
   alias TransparencyAndConsent.{VendorList, DecodeError}
 
   @supported_version 2
