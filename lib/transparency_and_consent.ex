@@ -1,15 +1,17 @@
 defmodule TransparencyAndConsent do
   @moduledoc """
-  IAB Transparency and Consent String Decoding
+  IAB Transparency and Consent Framework v2.0 String Decoding
 
   Currently only decodes the "version" and the "vendor consents" parts of the "core" segment.
   """
 
   alias TransparencyAndConsent.{DecodeError, Base64, Segment}
 
+  @type vendor_id :: pos_integer()
+
   @type t :: %__MODULE__{
           version: pos_integer(),
-          vendor_consents: [pos_integer()]
+          vendor_consents: [vendor_id()]
         }
 
   defstruct [
@@ -46,6 +48,7 @@ defmodule TransparencyAndConsent do
       iex> TransparencyAndConsent.vendor_has_consent?(%TransparencyAndConsent{vendor_consents: [8, 6, 2]}, 123)
       false
   """
+  @spec vendor_has_consent?(t(), vendor_id()) :: boolean()
   def vendor_has_consent?(%{vendor_consents: consents}, vendor_id) do
     vendor_id in consents
   end
