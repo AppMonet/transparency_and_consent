@@ -220,8 +220,6 @@ defmodule TransparencyAndConsent.Segment do
   defp decode_field(:publisher_country_code, _segement, _acc), do: invalid_input_error()
 
   defp decode_field(:vendor_consents, segment, acc) do
-    IO.inspect(segment)
-
     with {:ok, vendor_consents, rest} <- VendorList.decode(segment) do
       {:ok, %{acc | vendor_consents: vendor_consents}, rest}
     end
