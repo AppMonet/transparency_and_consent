@@ -28,6 +28,8 @@ defmodule TransparencyAndConsent.MixProject do
 
   defp deps do
     [
+      {:gpp, github: "Adaptmx/gpp", only: :dev},
+      {:benchee, "~> 1.0", only: :dev},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false}
     ]
   end

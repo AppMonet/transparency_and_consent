@@ -77,7 +77,7 @@ defmodule TransparencyAndConsent.Segment do
     {:error, %DecodeError{message: "unsupported version #{version}"}}
   end
 
-  defp version(<<version::binary-size(6), rest::binary()>>, acc) do
+  defp version(<<version::binary-size(6), rest::binary>>, acc) do
     case Integer.parse(version, 2) do
       {version, ""} ->
         {:ok, %{acc | version: version}, rest}
@@ -89,31 +89,31 @@ defmodule TransparencyAndConsent.Segment do
 
   defp decode_field(:version, _segment, _acc), do: invalid_input_error()
 
-  defp decode_field(:created, <<_created::binary-size(36), rest::binary()>>, acc) do
+  defp decode_field(:created, <<_created::binary-size(36), rest::binary>>, acc) do
     {:ok, acc, rest}
   end
 
   defp decode_field(:created, _segment, _acc), do: invalid_input_error()
 
-  defp decode_field(:last_updated, <<_last_updated::binary-size(36), rest::binary()>>, acc) do
+  defp decode_field(:last_updated, <<_last_updated::binary-size(36), rest::binary>>, acc) do
     {:ok, acc, rest}
   end
 
   defp decode_field(:last_updated, _segment, _acc), do: invalid_input_error()
 
-  defp decode_field(:cmp_id, <<_cmp_id::binary-size(12), rest::binary()>>, acc) do
+  defp decode_field(:cmp_id, <<_cmp_id::binary-size(12), rest::binary>>, acc) do
     {:ok, acc, rest}
   end
 
   defp decode_field(:cmp_id, _segment, _acc), do: invalid_input_error()
 
-  defp decode_field(:cmp_version, <<_cmp_version::binary-size(12), rest::binary()>>, acc) do
+  defp decode_field(:cmp_version, <<_cmp_version::binary-size(12), rest::binary>>, acc) do
     {:ok, acc, rest}
   end
 
   defp decode_field(:cmp_version, _segment, _acc), do: invalid_input_error()
 
-  defp decode_field(:consent_screen, <<_consent_screen::binary-size(6), rest::binary()>>, acc) do
+  defp decode_field(:consent_screen, <<_consent_screen::binary-size(6), rest::binary>>, acc) do
     {:ok, acc, rest}
   end
 
@@ -121,7 +121,7 @@ defmodule TransparencyAndConsent.Segment do
 
   defp decode_field(
          :consent_language,
-         <<_consent_language::binary-size(12), rest::binary()>>,
+         <<_consent_language::binary-size(12), rest::binary>>,
          acc
        ) do
     {:ok, acc, rest}
@@ -131,7 +131,7 @@ defmodule TransparencyAndConsent.Segment do
 
   defp decode_field(
          :vendor_list_version,
-         <<_vendor_list_version::binary-size(12), rest::binary()>>,
+         <<_vendor_list_version::binary-size(12), rest::binary>>,
          acc
        ) do
     {:ok, acc, rest}
@@ -141,7 +141,7 @@ defmodule TransparencyAndConsent.Segment do
 
   defp decode_field(
          :tcf_policy_version,
-         <<_tcf_policy_version::binary-size(6), rest::binary()>>,
+         <<_tcf_policy_version::binary-size(6), rest::binary>>,
          acc
        ) do
     {:ok, acc, rest}
@@ -151,7 +151,7 @@ defmodule TransparencyAndConsent.Segment do
 
   defp decode_field(
          :is_service_specific,
-         <<_is_service_specific::binary-size(1), rest::binary()>>,
+         <<_is_service_specific::binary-size(1), rest::binary>>,
          acc
        ) do
     {:ok, acc, rest}
@@ -161,7 +161,7 @@ defmodule TransparencyAndConsent.Segment do
 
   defp decode_field(
          :use_non_standard_stacks,
-         <<_use_non_standard_stacks::binary-size(1), rest::binary()>>,
+         <<_use_non_standard_stacks::binary-size(1), rest::binary>>,
          acc
        ) do
     {:ok, acc, rest}
@@ -171,7 +171,7 @@ defmodule TransparencyAndConsent.Segment do
 
   defp decode_field(
          :special_feature_opt_ins,
-         <<_special_feature_opt_ins::binary-size(12), rest::binary()>>,
+         <<_special_feature_opt_ins::binary-size(12), rest::binary>>,
          acc
        ) do
     {:ok, acc, rest}
@@ -181,7 +181,7 @@ defmodule TransparencyAndConsent.Segment do
 
   defp decode_field(
          :purpose_consents,
-         <<_purpose_consents::binary-size(24), rest::binary()>>,
+         <<_purpose_consents::binary-size(24), rest::binary>>,
          acc
        ) do
     {:ok, acc, rest}
@@ -191,7 +191,7 @@ defmodule TransparencyAndConsent.Segment do
 
   defp decode_field(
          :publisher_legitimate_interests,
-         <<_publisher_legitimate_interests::binary-size(24), rest::binary()>>,
+         <<_publisher_legitimate_interests::binary-size(24), rest::binary>>,
          acc
        ) do
     {:ok, acc, rest}
@@ -201,7 +201,7 @@ defmodule TransparencyAndConsent.Segment do
 
   defp decode_field(
          :purpose_one_treatment,
-         <<_purpose_one_treatment::binary-size(1), rest::binary()>>,
+         <<_purpose_one_treatment::binary-size(1), rest::binary>>,
          acc
        ) do
     {:ok, acc, rest}
@@ -211,7 +211,7 @@ defmodule TransparencyAndConsent.Segment do
 
   defp decode_field(
          :publisher_country_code,
-         <<_publisher_country_code::binary-size(12), rest::binary()>>,
+         <<_publisher_country_code::binary-size(12), rest::binary>>,
          acc
        ) do
     {:ok, acc, rest}
@@ -227,7 +227,7 @@ defmodule TransparencyAndConsent.Segment do
 
   defp decode_field(
          :vendor_legitimate_interests,
-         <<_vendor_legitimate_interests::binary-size(12), rest::binary()>>,
+         <<_vendor_legitimate_interests::binary-size(12), rest::binary>>,
          acc
        ) do
     {:ok, acc, rest}

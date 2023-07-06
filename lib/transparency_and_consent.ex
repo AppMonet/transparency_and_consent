@@ -53,7 +53,7 @@ defmodule TransparencyAndConsent do
     vendor_id in consents
   end
 
-  defp segment_type(<<type_bits::binary-size(3), _::binary()>>) do
+  defp segment_type(<<type_bits::binary-size(3), _::binary>>) do
     with {type_int, ""} <- Integer.parse(type_bits, 2) do
       Segment.id_to_segment(type_int)
     end

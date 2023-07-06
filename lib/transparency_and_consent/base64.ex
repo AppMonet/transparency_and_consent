@@ -21,7 +21,7 @@ defmodule TransparencyAndConsent.Base64 do
 
   defp do_decode(<<>>, acc), do: {:ok, acc |> Enum.reverse() |> Enum.join()}
 
-  defp do_decode(<<char::binary-size(1), rest::binary()>>, acc) do
+  defp do_decode(<<char::binary-size(1), rest::binary>>, acc) do
     case decode_char(char) do
       :error ->
         {:error, %DecodeError{message: "invalid character in segment: `#{char}`"}}

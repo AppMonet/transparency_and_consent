@@ -8,7 +8,7 @@ defmodule TransparencyAndConsent.VendorList do
     "1" => :range
   }
 
-  def decode(<<max_id::binary-size(16), input::binary()>>) do
+  def decode(<<max_id::binary-size(16), input::binary>>) do
     with {:ok, max_id} <- max_id(max_id),
          {:ok, encoding_type, input} <- encoding_type(input) do
       do_decode(encoding_type, input, max_id)
@@ -46,7 +46,7 @@ defmodule TransparencyAndConsent.VendorList do
   end
 
   defp extract_entries(
-         <<start_id::binary-size(16), end_id::binary-size(16), rest::binary()>>,
+         <<start_id::binary-size(16), end_id::binary-size(16), rest::binary>>,
          entries,
          true
        ) do
@@ -59,7 +59,7 @@ defmodule TransparencyAndConsent.VendorList do
     end
   end
 
-  defp extract_entries(<<vendor_id::binary-size(16), rest::binary()>>, entries, false) do
+  defp extract_entries(<<vendor_id::binary-size(16), rest::binary>>, entries, false) do
     case Integer.parse(vendor_id, 2) do
       {vendor_id, ""} -> {:ok, [vendor_id | entries], rest}
       _ -> invalid_input_error()
@@ -75,14 +75,14 @@ defmodule TransparencyAndConsent.VendorList do
     end
   end
 
-  defp encoding_type(<<type::binary-size(1), rest::binary()>>) do
+  defp encoding_type(<<type::binary-size(1), rest::binary>>) do
     case Map.get(@encoding_type, type) do
       nil -> {:error, %DecodeError{message: "invalid vendor list encoding type"}}
       type -> {:ok, type, rest}
     end
   end
 
-  defp num_entries(<<num_entries::binary-size(12), rest::binary()>>) do
+  defp num_entries(<<num_entries::binary-size(12), rest::binary>>) do
     case Integer.parse(num_entries, 2) do
       {num, ""} -> {:ok, num, rest}
       _ -> {:error, :invalid_input}
